@@ -1,0 +1,16 @@
+{
+    "name": "App",
+    "rootNamespace": "",
+    "references": [
+        "HelloWorld"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
