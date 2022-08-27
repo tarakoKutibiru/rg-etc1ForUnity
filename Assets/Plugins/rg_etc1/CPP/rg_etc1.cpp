@@ -2775,3 +2775,28 @@ namespace rg_etc1
    }
 
 } // namespace rg_etc1
+
+void rg_etc1_init()
+{
+   rg_etc1::pack_etc1_block_init();
+}
+
+void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither)
+{
+   rg_etc1::etc1_pack_params option = rg_etc1::etc1_pack_params();
+   option.m_quality = static_cast<rg_etc1::etc1_quality>(quality);
+   option.m_dithering = dither;
+
+   rg_etc1::etc1_block *block = new rg_etc1::etc1_block();
+
+   rg_etc1::pack_etc1_block(block, pSrc_pixels_rgba, option);
+
+   pETC1_block[0] = block->m_bytes[0];
+   pETC1_block[1] = block->m_bytes[1];
+   pETC1_block[2] = block->m_bytes[2];
+   pETC1_block[3] = block->m_bytes[3];
+   pETC1_block[4] = block->m_bytes[4];
+   pETC1_block[5] = block->m_bytes[5];
+   pETC1_block[6] = block->m_bytes[6];
+   pETC1_block[7] = block->m_bytes[7];
+}

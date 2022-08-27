@@ -2,7 +2,8 @@
     "name": "App",
     "rootNamespace": "",
     "references": [
-        "HelloWorld"
+        "HelloWorld",
+        "RG_ETC1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

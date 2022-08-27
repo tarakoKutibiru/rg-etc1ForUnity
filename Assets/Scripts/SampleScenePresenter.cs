@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 
 public class SampleScenePresenter : MonoBehaviour
 {
-    [SerializeField] Renderer pictureRenderer;
+    [SerializeField] Renderer source;
+    [SerializeField] Renderer commpressed;
 
     void Start()
     {
@@ -15,11 +16,13 @@ public class SampleScenePresenter : MonoBehaviour
         {
             Debug.Log(b);
         }
+
+        StartCoroutine(ShowPicture());
     }
 
     IEnumerator ShowPicture()
     {
-        var path = "file://" + Path.Combine(Application.streamingAssetsPath, "cat.png");
+        var path = "file://" + Path.Combine(Application.streamingAssetsPath, "color.png");
         Debug.Log(path);
 
         var request = UnityWebRequestTexture.GetTexture(path);
@@ -30,8 +33,11 @@ public class SampleScenePresenter : MonoBehaviour
             Debug.Log(request.error);
         }
         else {
-            var sourceTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            pictureRenderer.material.mainTexture = sourceTexture;
+            var sourceTexture      = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            var commpressedTexture = RG_ETC1.encodeETC(sourceTexture);
+
+            source.material.mainTexture      = sourceTexture;
+            commpressed.material.mainTexture = commpressedTexture;
         }
 
         request.Dispose();
