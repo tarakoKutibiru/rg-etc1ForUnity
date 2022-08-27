@@ -9,20 +9,27 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
     {
     #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || (UNITY_ANDROID && !UNITY_EDITOR)
         [DllImport("rg_etc1")]
-        public static extern void rg_etc1_init();
+        private static extern void rg_etc1_init();
 
         [DllImport("rg_etc1", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
+        private static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
     #else
         static void rg_etc1_init() {}
         static void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither) {}
     #endif
 
-        public static Texture2D encodeETC(Texture2D sourceTexture)
+        public static Texture2D EncodeToETC(Texture2D sourceTexture, Quality quality = Quality.Med, bool dithering = false)
         {
-            var width  = sourceTexture.width;
-            var height = sourceTexture.height;
+            var encodedData   = EncodeToETC(sourceTexture.GetPixels32(), sourceTexture.width, sourceTexture.height, quality, dithering);
+            var outputTexture = new Texture2D(sourceTexture.width, sourceTexture.height, TextureFormat.ETC_RGB4, false);
+            outputTexture.LoadRawTextureData(encodedData);
+            outputTexture.Apply();
 
+            return outputTexture;
+        }
+
+        public static byte[] EncodeToETC(Color32[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
+        {
             int[] pixels = new int[width * height];
             rg_etc1_init();
 
@@ -37,47 +44,36 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
                         {
                             int x, y;
 
-                            Color32[] temp = new Color32[16];
-                            int       pi   = 0;
+                            Color32[] block = new Color32[16];
+                            int       pi    = 0;
                             for (x = i; x < i + 4; x++)
                             {
                                 for (y = j; y < j + 4; y++)
                                 {
-                                    temp[pi++] = sourceTexture.GetPixel(y, x);
+                                    block[pi++] = source[y + x * height];
                                 }
                             }
 
-                            writer.Write(GenETC1(temp));
+                            writer.Write(EncodeBlock(block, quality, dithering));
                         }
                     }
 
-                    var outputTexture = new Texture2D(width, height, TextureFormat.ETC_RGB4, false);
-                    outputTexture.LoadRawTextureData(stream.GetBuffer());
-                    outputTexture.Apply();
-
-                    return outputTexture;
+                    return stream.GetBuffer();
                 }
         }
 
-        public static byte[] GenETC1(Color32[] colors)
+        static byte[] EncodeBlock(Color32[] block, Quality quality, bool dithering)
         {
-            uint[] pixels = new uint[colors.Length];
+            uint[] pixels = new uint[block.Length];
 
-            for (int i = 0; i < colors.Length; i++)
+            for (int i = 0; i < block.Length; i++)
             {
-                pixels[i] = (uint)((colors[i].a << 24) | (colors[i].b << 16) | (colors[i].g << 8) | colors[i].r);
+                pixels[i] = (uint)((block[i].a << 24) | (block[i].b << 16) | (block[i].g << 8) | block[i].r);
             }
 
             byte[] result = new byte[8];
-            rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)ETC1_Quality.med, false);
+            rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
             return result;
-        }
-
-        public enum ETC1_Quality
-        {
-            low  = 0,
-            med  = 1,
-            high = 2
         }
     }
 }

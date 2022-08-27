@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.jslib": "js",
+        "string": "cpp",
+        "stdexcept": "cpp",
+        "iosfwd": "cpp",
+        "sstream": "cpp",
+        "__config": "cpp"
+    }
+}

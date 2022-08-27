@@ -36,7 +36,7 @@ namespace TarakoKutibiru.RG_ETC1.Samples
             }
             else {
                 var sourceTexture      = ((DownloadHandlerTexture)request.downloadHandler).texture;
-                var commpressedTexture = RgEtc1.encodeETC(sourceTexture);
+                var commpressedTexture = RgEtc1.EncodeToETC(sourceTexture);
 
                 source.material.mainTexture      = sourceTexture;
                 commpressed.material.mainTexture = commpressedTexture;
