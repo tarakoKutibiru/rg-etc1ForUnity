@@ -12,6 +12,12 @@ There are similar assets in the Unity Asset Store, but they did not work well in
 
 If you are using Unity v2021 or higher, you may want to try [Texture2d.Compress](https://docs.unity3d.com/2021.1/Documentation/ScriptReference/Texture2D.Compress.html).
 
+# instaInstall via git URL
+
+```
+https://github.com/tarakoKutibiru/rg-etc1ForUnity.git?path=rg-etc1ForUnity/Assets/Public/
+```
+
 # Suppoted Platforms
 
 - Android
