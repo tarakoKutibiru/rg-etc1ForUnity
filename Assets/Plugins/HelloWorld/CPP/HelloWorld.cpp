@@ -9,10 +9,12 @@ namespace Hoge
           return 5.0f;
      }
 
-     void GetByteArray(unsigned int *ptr)
+     void GetByteArray(unsigned char *ptr)
      {
-          unsigned int array[8] = {0, 1, 2, 3, 4, 5, 6, 7};
-          ptr = array;
+          for (int i = 0; i < 8; i++)
+          {
+               ptr[i] = i + 1;
+          }
      }
 
      void GetIntArray(int *ptr)

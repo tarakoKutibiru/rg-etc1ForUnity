@@ -15,6 +15,9 @@ public class HelloWorld  {
     static extern void helloworld_get_byte(ref byte ptr);
 
     [DllImport("HelloWorld")]
+    static extern void helloworld_get_byte_array(ref byte ptr);
+
+    [DllImport("HelloWorld")]
     static extern void helloworld_get_int_array(IntPtr ptr);
 #endif
 
@@ -22,6 +25,13 @@ public class HelloWorld  {
     {
         byte b = new byte();
         helloworld_get_byte(ref b);
+        return b;
+    }
+
+    public static byte[] GetByteArray()
+    {
+        byte[] b = new byte[8];
+        helloworld_get_byte_array(ref b[0]);
         return b;
     }
 

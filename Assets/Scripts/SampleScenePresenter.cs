@@ -11,9 +11,9 @@ public class SampleScenePresenter : MonoBehaviour
 
     void Start()
     {
-        foreach (var v in HelloWorld.GetIntArray())
+        foreach (var b in HelloWorld.GetByteArray())
         {
-            Debug.Log(v);
+            Debug.Log(b);
         }
     }
 

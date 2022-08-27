@@ -1,7 +1,7 @@
 namespace Hoge
 {
     float FooPluginFunction();
-    void GetByteArray(unsigned int *ptr);
+    void GetByteArray(unsigned char *ptr);
     void GetIntArray(int *ptr);
 }
 
