@@ -8,16 +8,6 @@ public class HelloWorld  {
     [DllImport("__Internal")]
     public static extern float FooPluginFunction();
 #elif UNITY_OSX || UNITY_ANDROID
-    
-    #region Log
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void DebugLogDelegate(string str);
-    DebugLogDelegate debugLogFunc = msg => Debug.Log(msg);
-    
-    [DllImport("HelloWorld")] public static extern void helloworld_set_debug_log_func(IntPtr ptr);
-    [DllImport("HelloWorld")] public static extern void helloworld_debug_log_test();
-    #endregion
-
     [DllImport("HelloWorld")]
     public static extern float FooPluginFunction();
 
@@ -35,16 +25,6 @@ public class HelloWorld  {
     static void helloworld_get_byte_array(ref byte ptr) {}
     static void helloworld_get_int_array(IntPtr ptr) {}
 #endif
-
-    public void Init()
-    {
-        #if UNITY_OSX || UNITY_ANDROID
-        var callback = new DebugLogDelegate(debugLogFunc);
-        var ptr = Marshal.GetFunctionPointerForDelegate(callback);
-        helloworld_set_debug_log_func(ptr);
-        helloworld_debug_log_test();
-        #endif
-    }
 
     public static byte GetByte()
     {
