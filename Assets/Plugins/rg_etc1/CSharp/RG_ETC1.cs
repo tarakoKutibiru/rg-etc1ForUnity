@@ -58,7 +58,7 @@ public class RG_ETC1
         }
 
         byte[] result = new byte[8];
-        rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)ETC1_Quality.low, false);
+        rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)ETC1_Quality.med, false);
         byte[] block = result;    // pack_etc1_block(pixels);
 
         return block;
