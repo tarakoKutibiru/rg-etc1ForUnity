@@ -7,7 +7,7 @@ public class HelloWorld  {
 #if UNITY_IPHONE
     [DllImport("__Internal")]
     public static extern float FooPluginFunction();
-#else
+#elif UNITY_EDITOR
     [DllImport("HelloWorld")]
     public static extern float FooPluginFunction();
 
@@ -19,6 +19,12 @@ public class HelloWorld  {
 
     [DllImport("HelloWorld")]
     static extern void helloworld_get_int_array(IntPtr ptr);
+
+#else
+    public static float FooPluginFunction() {};
+    static void helloworld_get_byte(ref byte ptr) {};
+    static void helloworld_get_byte_array(ref byte ptr) {};
+    static void helloworld_get_int_array(IntPtr ptr) {};
 #endif
 
     public static byte GetByte()
