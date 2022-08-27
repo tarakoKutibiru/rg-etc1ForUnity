@@ -7,7 +7,17 @@ public class HelloWorld  {
 #if UNITY_IPHONE
     [DllImport("__Internal")]
     public static extern float FooPluginFunction();
-#elif UNITY_EDITOR
+#elif UNITY_OSX || UNITY_ANDROID
+    
+    #region Log
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void DebugLogDelegate(string str);
+    DebugLogDelegate debugLogFunc = msg => Debug.Log(msg);
+    
+    [DllImport("HelloWorld")] public static extern void helloworld_set_debug_log_func(IntPtr ptr);
+    [DllImport("HelloWorld")] public static extern void helloworld_debug_log_test();
+    #endregion
+
     [DllImport("HelloWorld")]
     public static extern float FooPluginFunction();
 
@@ -19,13 +29,22 @@ public class HelloWorld  {
 
     [DllImport("HelloWorld")]
     static extern void helloworld_get_int_array(IntPtr ptr);
-
 #else
-    public static float FooPluginFunction() {};
-    static void helloworld_get_byte(ref byte ptr) {};
-    static void helloworld_get_byte_array(ref byte ptr) {};
-    static void helloworld_get_int_array(IntPtr ptr) {};
+    public static float FooPluginFunction() { return 0.0f; }
+    static void helloworld_get_byte(ref byte ptr) {}
+    static void helloworld_get_byte_array(ref byte ptr) {}
+    static void helloworld_get_int_array(IntPtr ptr) {}
 #endif
+
+    public void Init()
+    {
+        #if UNITY_OSX || UNITY_ANDROID
+        var callback = new DebugLogDelegate(debugLogFunc);
+        var ptr = Marshal.GetFunctionPointerForDelegate(callback);
+        helloworld_set_debug_log_func(ptr);
+        helloworld_debug_log_test();
+        #endif
+    }
 
     public static byte GetByte()
     {

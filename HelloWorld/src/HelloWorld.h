@@ -7,6 +7,29 @@ namespace Hoge
 
 extern "C"
 {
+    using debug_log_func_type = void (*)(const char *);
+
+    namespace
+    {
+        debug_log_func_type debug_log_func = nullptr;
+    }
+
+    void helloworld_debug_log(const char *msg)
+    {
+        if (debug_log_func != nullptr)
+            debug_log_func(msg);
+    }
+
+    void helloworld_set_debug_log_func(debug_log_func_type func)
+    {
+        debug_log_func = func;
+    }
+
+    void helloworld_debug_log_test()
+    {
+        helloworld_debug_log("hogehoge");
+    }
+
     float FooPluginFunction()
     {
         return Hoge::FooPluginFunction();
