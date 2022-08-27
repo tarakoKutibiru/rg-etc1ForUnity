@@ -12,19 +12,6 @@ public class SampleScenePresenter : MonoBehaviour
 
     void Start()
     {
-        var helloworld = new HelloWorld();
-        helloworld.Init();
-
-        foreach(var intValue in HelloWorld.GetIntArray())
-        {
-            Debug.Log($"###HelloWorld:GetIntArray {intValue}");
-        }
-
-        foreach(var byteValue in HelloWorld.GetByteArray())
-        {
-            Debug.Log($"###HelloWorld:GetByteArray {byteValue}");
-        }
-
         StartCoroutine(ShowPicture());
     }
 
