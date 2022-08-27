@@ -3,7 +3,6 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := rg_etc1
-LOCAL_MODULE_FILENAME := libRg_etc1
 LOCAL_CFLAGS    := -Werror
 CPP_FILES := $(shell find $(LOCAL_PATH)/src -name *.cpp)
 CPP_FILES += $(shell find $(LOCAL_PATH)/src -name *.c)
