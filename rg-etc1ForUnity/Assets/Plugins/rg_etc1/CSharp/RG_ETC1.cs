@@ -5,18 +5,15 @@ using UnityEngine;
 
 public class RG_ETC1
 {
-    #if UNITY_ANDROID && !UNITY_EDITOR
+    #if UNITY_OSX || (UNITY_ANDROID && !UNITY_EDITOR)
     [DllImport("rg_etc1")]
     public static extern void rg_etc1_init();
 
     [DllImport("rg_etc1", CallingConvention = CallingConvention.Cdecl)]
     public static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
     #else
-    [DllImport("rg_etc1")]
-    public static extern void rg_etc1_init();
-
-    [DllImport("rg_etc1", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
+    static void rg_etc1_init() {}
+    static void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither) {}
     #endif
 
     public static Texture2D encodeETC(Texture2D sourceTexture)
