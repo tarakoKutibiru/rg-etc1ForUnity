@@ -1,0 +1,10 @@
+{
+    "name": "tarakokutibiru.rgetc.unity",
+    "version": "0.0.1",
+    "displayName": "rg-etc1 For Unity",
+    "description": "Runtime Compression ETC1",
+    "author": {
+        "name": "tarakoKutibiru",
+        "url": "https://github.com/tarakoKutibiru"
+    }
+}
