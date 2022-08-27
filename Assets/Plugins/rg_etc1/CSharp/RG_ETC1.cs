@@ -34,7 +34,7 @@ public class RG_ETC1
                         int       pi   = 0;
                         for (x = i; x < i + 4; x++)
                             for (y = j; y < j + 4; y++)
-                                temp[pi++] = sourceTexture.GetPixel(x, y);
+                                temp[pi++] = sourceTexture.GetPixel(y, x);
 
                         writer.Write(GenETC1(temp));
                     }
