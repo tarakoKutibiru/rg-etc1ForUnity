@@ -10,5 +10,6 @@ CPP_FILES += $(shell find $(LOCAL_PATH)/src -name *.c)
 LOCAL_SRC_FILES += $(CPP_FILES:$(LOCAL_PATH)/%=%)
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/src
 LOCAL_LDLIBS    := -llog
+LOCAL_LDFLAGS += -fuse-ld=bfd
 
 include $(BUILD_SHARED_LIBRARY)
