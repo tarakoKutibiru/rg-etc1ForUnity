@@ -7,11 +7,14 @@ using UnityEngine.Networking;
 
 public class SampleScenePresenter : MonoBehaviour
 {
-    [SerializeField] Renderer renderer;
+    [SerializeField] Renderer pictureRenderer;
 
     void Start()
     {
-        StartCoroutine(ShowPicture());
+        foreach (var v in HelloWorld.GetIntArray())
+        {
+            Debug.Log(v);
+        }
     }
 
     IEnumerator ShowPicture()
@@ -28,7 +31,7 @@ public class SampleScenePresenter : MonoBehaviour
         }
         else {
             var sourceTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            renderer.material.mainTexture = sourceTexture;
+            pictureRenderer.material.mainTexture = sourceTexture;
         }
 
         request.Dispose();
