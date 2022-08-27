@@ -12,8 +12,18 @@ public class HelloWorld  {
     public static extern float FooPluginFunction();
 
     [DllImport("HelloWorld")]
+    static extern void helloworld_get_byte(ref byte ptr);
+
+    [DllImport("HelloWorld")]
     static extern void helloworld_get_int_array(IntPtr ptr);
 #endif
+
+    public static byte GetByte()
+    {
+        byte b = new byte();
+        helloworld_get_byte(ref b);
+        return b;
+    }
 
     public static int[] GetIntArray()
     {

@@ -12,7 +12,12 @@ extern "C"
         return Hoge::FooPluginFunction();
     }
 
-    void helloworld_get_byte_array(unsigned int *ptr)
+    void helloworld_get_byte(unsigned char *ptr)
+    {
+        ptr[0] = 122;
+    }
+
+    void helloworld_get_byte_array(unsigned char *ptr)
     {
         Hoge::GetByteArray(ptr);
     }
