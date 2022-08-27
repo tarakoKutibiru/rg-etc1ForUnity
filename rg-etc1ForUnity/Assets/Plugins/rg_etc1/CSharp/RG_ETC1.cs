@@ -6,8 +6,11 @@ using UnityEngine;
 public class RG_ETC1
 {
     #if UNITY_ANDROID && !UNITY_EDITOR
-    public static void rg_etc1_init() {}
-    public static void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither) {}
+    [DllImport("rg_etc1")]
+    public static extern void rg_etc1_init();
+
+    [DllImport("rg_etc1", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
     #else
     [DllImport("rg_etc1")]
     public static extern void rg_etc1_init();
