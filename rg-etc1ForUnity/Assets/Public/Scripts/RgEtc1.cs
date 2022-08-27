@@ -7,7 +7,7 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
 {
     public static class RgEtc1
     {
-    #if UNITY_OSX || (UNITY_ANDROID && !UNITY_EDITOR)
+    #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX || (UNITY_ANDROID && !UNITY_EDITOR)
         [DllImport("rg_etc1")]
         public static extern void rg_etc1_init();
 
