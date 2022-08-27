@@ -22,7 +22,11 @@ public class SampleScenePresenter : MonoBehaviour
 
     IEnumerator ShowPicture()
     {
-        var path = "file://" + Path.Combine(Application.streamingAssetsPath, "cat_256x256.png");
+        var fileName = "cat_256x256.png";
+        var path     = "file://" + Path.Combine(Application.streamingAssetsPath, fileName);
+        #if UNITY_ANDROID && !UNITY_EDITOR
+        path = Path.Combine(Application.streamingAssetsPath, fileName);
+        #endif
         Debug.Log(path);
 
         var request = UnityWebRequestTexture.GetTexture(path);
