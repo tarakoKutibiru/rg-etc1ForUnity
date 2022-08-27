@@ -1,10 +1,7 @@
 {
-    "name": "App",
-    "rootNamespace": "",
-    "references": [
-        "HelloWorld",
-        "RG_ETC1"
-    ],
+    "name": "TarakoKutibiru.RG_ETC1.Runtime",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Runtime",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,0 +1,17 @@
+{
+    "name": "TarakoKutibiru.RG_ETC1.Samples",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples",
+    "references": [
+        "HelloWorld",
+        "TarakoKutibiru.RG_ETC1.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
