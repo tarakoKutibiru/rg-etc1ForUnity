@@ -38,8 +38,12 @@ public class RG_ETC1
                         Color32[] temp = new Color32[16];
                         int       pi   = 0;
                         for (x = i; x < i + 4; x++)
+                        {
                             for (y = j; y < j + 4; y++)
+                            {
                                 temp[pi++] = sourceTexture.GetPixel(y, x);
+                            }
+                        }
 
                         writer.Write(GenETC1(temp));
                     }
@@ -64,9 +68,7 @@ public class RG_ETC1
 
         byte[] result = new byte[8];
         rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)ETC1_Quality.med, false);
-        byte[] block = result;    // pack_etc1_block(pixels);
-
-        return block;
+        return result;
     }
 
     public enum ETC1_Quality
