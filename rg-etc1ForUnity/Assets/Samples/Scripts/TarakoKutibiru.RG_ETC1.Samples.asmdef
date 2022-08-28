@@ -3,7 +3,8 @@
     "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples",
     "references": [
         "HelloWorld",
-        "TarakoKutibiru.RG_ETC1.Runtime"
+        "TarakoKutibiru.RG_ETC1.Runtime",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
