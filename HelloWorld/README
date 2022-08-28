@@ -1,0 +1,13 @@
+# Build
+
+## Mac
+
+```
+make mac
+```
+
+## Android
+
+```
+make android
+```
