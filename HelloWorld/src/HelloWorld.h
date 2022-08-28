@@ -1,3 +1,5 @@
+#include <iostream>
+
 namespace Hoge
 {
     float FooPluginFunction();
