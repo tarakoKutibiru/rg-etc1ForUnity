@@ -1,6 +1,6 @@
 {
-    "name": "TarakoKutibiru.RG_ETC1.Samples",
-    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples",
+    "name": "TarakoKutibiru.RG_ETC1.Samples.RgEtc1",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples.RgEtc1",
     "references": [
         "HelloWorld",
         "TarakoKutibiru.RG_ETC1.Runtime",

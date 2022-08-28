@@ -4,14 +4,14 @@ using UnityEngine;
 using System.IO;
 using System;
 using UnityEngine.Networking;
-using TarakoKutibiru.RG_ETC1.Runtime;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Threading;
+using RGETC = TarakoKutibiru.RG_ETC1.Runtime;
 
-namespace TarakoKutibiru.RG_ETC1.Samples
+namespace TarakoKutibiru.RG_ETC1.Samples.RgEtc1
 {
     public class SampleScenePresenter : MonoBehaviour
     {
@@ -68,7 +68,7 @@ namespace TarakoKutibiru.RG_ETC1.Samples
                 var height         = sourceTexture.height;
 
                 await UniTask.SwitchToThreadPool();
-                var encodedPixelDataArray = RgEtc1.EncodeToETC(pixelDataArray, width, height);
+                var encodedPixelDataArray = RGETC.RgEtc1.EncodeToETC(pixelDataArray, width, height);
 
                 await UniTask.SwitchToMainThread();
                 var encodedTexture = new Texture2D(width, height, TextureFormat.ETC_RGB4, false);
