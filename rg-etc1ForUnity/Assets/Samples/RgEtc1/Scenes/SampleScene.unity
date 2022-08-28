@@ -558,6 +558,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 1816235112}
   commpressed: {fileID: 245762880}
+  targetImageNameArray:
+  - cat.png
+  - cat_256x256.png
+  - cat_512x512.png
+  - cat_1024x1024.png
+  - color.png
 --- !u!4 &2040536390
 Transform:
   m_ObjectHideFlags: 0
