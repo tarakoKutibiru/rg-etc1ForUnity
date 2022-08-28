@@ -1,7 +1,11 @@
 {
-    "name": "HelloWorld",
-    "rootNamespace": "",
-    "references": [],
+    "name": "TarakoKutibiru.RG_ETC1.Samples.NativeArray",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples.NativeArray",
+    "references": [
+        "HelloWorld",
+        "TarakoKutibiru.RG_ETC1.Runtime",
+        "UniTask"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

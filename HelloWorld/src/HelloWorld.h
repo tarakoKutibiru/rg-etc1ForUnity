@@ -51,4 +51,13 @@ extern "C"
     {
         Hoge::GetIntArray(ptr);
     }
+
+    void helloworld_get_native_array(void *ptr)
+    {
+        unsigned char *bytePtr = (unsigned char *)ptr;
+        for (int i = 0; i < 8; i++)
+        {
+            bytePtr[i] = i + 1;
+        }
+    }
 }

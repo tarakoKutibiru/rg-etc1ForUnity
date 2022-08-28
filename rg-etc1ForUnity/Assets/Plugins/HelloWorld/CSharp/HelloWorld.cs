@@ -19,6 +19,9 @@ public class HelloWorld  {
 
     [DllImport("HelloWorld")]
     static extern void helloworld_get_int_array(IntPtr ptr);
+
+    [DllImport("HelloWorld")]
+    public static extern void helloworld_get_native_array(IntPtr ptr);
 #else
     public static float FooPluginFunction() { return 0.0f; }
     static void helloworld_get_byte(ref byte ptr) {}
