@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace TarakoKutibiru.RG_ETC1.Runtime
 {
@@ -13,9 +15,12 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
 
         [DllImport("rg_etc1", CallingConvention = CallingConvention.Cdecl)]
         private static extern void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither);
+
+        [DllImport("rg_etc1", EntryPoint = "rg_etc1_pack_etc1_block")]
+        private static extern void rg_etc1_pack_etc1_block_intptr(IntPtr pETC1_block, IntPtr pSrc_pixels_rgba, int quality, bool dither);
     #else
         static void rg_etc1_init() {}
-        static void rg_etc1_pack_etc1_block(ref byte pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither) {}
+        static void rg_etc1_pack_etc1_block(IntPtr pETC1_block, ref uint pSrc_pixels_rgba, int quality, bool dither) {}
     #endif
 
         public static Texture2D EncodeToETC(Texture2D sourceTexture, Quality quality = Quality.Med, bool dithering = false)
@@ -30,13 +35,12 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
 
         public static byte[] EncodeToETC(Color32[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
         {
-            int[] pixels = new int[width * height];
             rg_etc1_init();
 
             int i, j;
 
             using (var stream = new MemoryStream())
-                using (var writer = new BinaryWriter(stream))
+                using (var writer = new System.IO.BinaryWriter(stream))
                 {
                     for (i = 0; i < height; i += 4)
                     {
@@ -75,5 +79,58 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
             rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
             return result;
         }
+
+        #region unsafe
+        public static unsafe void EncodeToETC(ref NativeArray<byte> encoded,  ref NativeArray<Color32> source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
+        {
+            rg_etc1_init();
+
+            int i, j;
+
+            using (var writer = new MemoryBinaryWriter())
+            {
+                for (i = 0; i < height; i += 4)
+                {
+                    for (j = 0; j < width; j += 4)
+                    {
+                        int x, y;
+
+                        var block = new NativeArray<Color32>(16, Allocator.Temp);
+                        int pi    = 0;
+                        for (x = i; x < i + 4; x++)
+                        {
+                            for (y = j; y < j + 4; y++)
+                            {
+                                block[pi++] = source[y + x * height];
+                            }
+                        }
+
+                        var encodedBlock = new NativeArray<byte>(8, Allocator.Temp);
+                        EncodeBlock(ref encodedBlock, ref block, quality, dithering);
+                        writer.WriteBytes(encodedBlock.GetUnsafeReadOnlyPtr(), encodedBlock.Length * UnsafeUtility.SizeOf<Byte>());
+
+                        block.Dispose();
+                        encodedBlock.Dispose();
+                    }
+                }
+
+                encoded = writer.GetContentAsNativeArray();
+            }
+        }
+
+        static unsafe void EncodeBlock(ref NativeArray<byte> encodedBlock, ref NativeArray<Color32> sourceBlock, Quality quality, bool dithering)
+        {
+            var pixels = new NativeArray<uint>(sourceBlock.Length, Allocator.Temp);
+
+            for (int i = 0; i < sourceBlock.Length; i++)
+            {
+                pixels[i] = (uint)((sourceBlock[i].a << 24) | (sourceBlock[i].b << 16) | (sourceBlock[i].g << 8) | sourceBlock[i].r);
+            }
+
+            rg_etc1_pack_etc1_block_intptr((IntPtr)encodedBlock.GetUnsafePtr(), (IntPtr)pixels.GetUnsafePtr(), (int)quality, dithering);
+
+            pixels.Dispose();
+        }
+        #endregion
     }
 }

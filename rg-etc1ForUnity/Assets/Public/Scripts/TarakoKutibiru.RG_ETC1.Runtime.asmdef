@@ -1,10 +1,12 @@
 {
     "name": "TarakoKutibiru.RG_ETC1.Runtime",
     "rootNamespace": "TarakoKutibiru.RG_ETC1.Runtime",
-    "references": [],
+    "references": [
+        "Unity.Collections"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
