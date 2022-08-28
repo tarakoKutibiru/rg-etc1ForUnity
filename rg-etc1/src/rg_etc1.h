@@ -79,5 +79,5 @@ namespace rg_etc1
 extern "C"
 {
    void rg_etc1_init();
-   void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
+   void rg_etc1_pack_etc1_block(void *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
 }
