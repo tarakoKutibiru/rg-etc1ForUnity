@@ -35,10 +35,14 @@ namespace TarakoKutibiru.RG_ETC1.Samples
                 Debug.Log(request.error);
             }
             else {
-                var sourceTexture      = ((DownloadHandlerTexture)request.downloadHandler).texture;
-                var commpressedTexture = RgEtc1.EncodeToETC(sourceTexture);
+                var sourceTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+                source.material.mainTexture = sourceTexture;
 
-                source.material.mainTexture      = sourceTexture;
+                var stopWatch = new StopWatch();
+                stopWatch.Start();
+                var commpressedTexture = RgEtc1.EncodeToETC(sourceTexture);
+                Debug.Log($"Time: {stopWatch.Stop()}ms");
+
                 commpressed.material.mainTexture = commpressedTexture;
             }
 
