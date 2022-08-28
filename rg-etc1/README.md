@@ -1,12 +1,14 @@
+# Build
 
-# Mac
 
-```
-make build
-```
-
-# Android
+## Mac
 
 ```
-ndk-build NDK_PROJECT_PATH=${PWD} NDK_APPLICATION_MK="\$(NDK_PROJECT_PATH)/Application.mk"
+make mac
+```
+
+## Android
+
+```
+mac android
 ```
