@@ -22,3 +22,4 @@ https://github.com/tarakoKutibiru/rg-etc1ForUnity.git?path=rg-etc1ForUnity/Asset
 
 - Android
 - macOS
+- windows
