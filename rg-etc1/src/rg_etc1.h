@@ -76,8 +76,14 @@ namespace rg_etc1
 //
 //------------------------------------------------------------------------------
 
+#ifdef _WIN64 || _WIN32
+#define EXPORT __declspec(dllexport)
+#elif
+#define EXPORT
+#endif
+
 extern "C"
 {
-    __declspec(dllexport) void rg_etc1_init();
-    __declspec(dllexport) void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
+    EXPORT void rg_etc1_init();
+    EXPORT void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
 }
