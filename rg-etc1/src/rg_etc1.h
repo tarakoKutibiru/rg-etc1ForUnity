@@ -78,6 +78,6 @@ namespace rg_etc1
 
 extern "C"
 {
-   void rg_etc1_init();
-   void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
+    __declspec(dllexport) void rg_etc1_init();
+    __declspec(dllexport) void rg_etc1_pack_etc1_block(unsigned char *pETC1_block, const unsigned int *pSrc_pixels_rgba, int quality, bool dither);
 }
