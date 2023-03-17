@@ -11,17 +11,19 @@ using Debug = UnityEngine.Debug;
 
 namespace TarakoKutibiru.RG_ETC1.Samples.VRM
 {
-    public class Presenter : MonoBehaviour
+    public class VRMView : MonoBehaviour
     {
+        [SerializeField] string filePath = string.Empty;
+        [SerializeField] bool etc;
+
         // Start is called before the first frame update
         void Start()
         {
-            var path = "file://" + Path.Combine(Application.streamingAssetsPath, "Alicia_VRM", "Alicia", "VRM", "AliciaSolid.vrm");
+            var path = "file://" + Path.Combine(Application.streamingAssetsPath, filePath);
 #if UNITY_ANDROID && !UNITY_EDITOR
             path = Path.Combine(Application.streamingAssetsPath, fileName);
 #endif
             StartCoroutine(this.LoadVRM(path));
-
         }
 
         IEnumerator LoadVRM(string path)
@@ -38,10 +40,12 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             }
             else
             {
-                var data = new UniGLTF.GlbBinaryParser(request.downloadHandler.data, "AliciaSolid").Parse();
-                using var context = new UniGLTF.ImporterContext(data, textureDeserializer: new TextureDeserializer());
+                var data = new UniGLTF.GlbBinaryParser(request.downloadHandler.data,this.gameObject.name).Parse();
+                using var context = new UniGLTF.ImporterContext(data, textureDeserializer: etc ? new TextureDeserializer():null);
                 var instance = context.Load();
                 instance.ShowMeshes();
+                instance.transform.parent = this.transform;
+                instance.transform.localPosition = Vector3.zero;
             }
 
             yield return null;
