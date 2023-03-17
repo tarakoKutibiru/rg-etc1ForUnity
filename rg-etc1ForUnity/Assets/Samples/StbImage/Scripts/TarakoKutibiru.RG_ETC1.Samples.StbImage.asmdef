@@ -1,0 +1,19 @@
+{
+    "name": "TarakoKutibiru.RG_ETC1.Samples.StbImage",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples.StbImage",
+    "references": [
+        "HelloWorld",
+        "TarakoKutibiru.RG_ETC1.Runtime",
+        "StbSharp.StbImageSharp",
+        "Mochineko.StbImageSharpForUnity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
