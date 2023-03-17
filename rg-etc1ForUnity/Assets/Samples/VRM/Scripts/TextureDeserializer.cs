@@ -17,6 +17,7 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
     {
         public async Task<Texture2D> LoadTextureAsync(DeserializingTextureInfo textureInfo, IAwaitCaller awaitCaller)
         {
+            Debug.Log($"###Start");
             switch (textureInfo.DataMimeType)
             {
                 case "image/png":
@@ -36,12 +37,25 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             }
 
             var imageResult = ImageDecoder.DecodeImage(textureInfo.ImageData);
-            var texture = new Texture2D(imageResult.Width, imageResult.Height, imageResult.Comp.ToUnityTextureFormat(), textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
-            texture.LoadRawTextureData(imageResult.Data);
+            Debug.Log(imageResult.Comp.ToUnityTextureFormat());
+            Debug.Log(textureInfo.ImageData.Length);
+            Debug.Log(imageResult.Data.Length);
+            
+            var colors = new Color32[imageResult.Width*imageResult.Height];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = new Color32(imageResult.Data[i * 4], imageResult.Data[i * 4 + 1], imageResult.Data[i * 4 + 2], imageResult.Data[i * 4 + 3]);
+            }
+            var etc1Data = RgEtc1.EncodeToETC(colors, imageResult.Width, imageResult.Height);
+            Debug.Log($"etc1Data: {etc1Data}");
+
+            var texture = new Texture2D(imageResult.Width, imageResult.Height, TextureFormat.ETC_RGB4, textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
+            texture.LoadRawTextureData(etc1Data);
             texture.wrapModeU = textureInfo.WrapModeU;
             texture.wrapModeV = textureInfo.WrapModeV;
             texture.filterMode = textureInfo.FilterMode;
             texture.Apply();
+            Debug.Log($"###Done");
 
             return texture;
         }
