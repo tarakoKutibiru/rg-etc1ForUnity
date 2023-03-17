@@ -39,7 +39,7 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             else
             {
                 var data = new UniGLTF.GlbBinaryParser(request.downloadHandler.data, "AliciaSolid").Parse();
-                using var context = new UniGLTF.ImporterContext(data);
+                using var context = new UniGLTF.ImporterContext(data, textureDeserializer: new TextureDeserializer());
                 var instance = context.Load();
                 instance.ShowMeshes();
             }
