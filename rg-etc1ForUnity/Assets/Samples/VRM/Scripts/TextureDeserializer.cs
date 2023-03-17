@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using VRMShaders;
 using ColorSpace = VRMShaders.ColorSpace;
+using StbImageSharp;
+using Mochineko.StbImageSharpForUnity;
+using TarakoKutibiru.RG_ETC1;
+using TarakoKutibiru.RG_ETC1.Runtime;
 
 namespace TarakoKutibiru.RG_ETC1.Samples.VRM
 {
@@ -31,15 +35,13 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
                     break;
             }
 
-            var texture = new Texture2D(2, 2, TextureFormat.ARGB32, textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
-            if (textureInfo.ImageData != null)
-            {
-                texture.LoadImage(textureInfo.ImageData);
-                texture.wrapModeU = textureInfo.WrapModeU;
-                texture.wrapModeV = textureInfo.WrapModeV;
-                texture.filterMode = textureInfo.FilterMode;
-                await awaitCaller.NextFrame();
-            }
+            var imageResult = ImageDecoder.DecodeImage(textureInfo.ImageData);
+            var texture = new Texture2D(imageResult.Width, imageResult.Height, imageResult.Comp.ToUnityTextureFormat(), textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
+            texture.LoadRawTextureData(imageResult.Data);
+            texture.wrapModeU = textureInfo.WrapModeU;
+            texture.wrapModeV = textureInfo.WrapModeV;
+            texture.filterMode = textureInfo.FilterMode;
+            texture.Apply();
 
             return texture;
         }

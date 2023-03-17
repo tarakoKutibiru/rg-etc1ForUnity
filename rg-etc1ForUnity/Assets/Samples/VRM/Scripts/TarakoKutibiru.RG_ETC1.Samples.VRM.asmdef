@@ -6,7 +6,9 @@
         "UniGLTF",
         "VRM10",
         "VRMShaders.GLTF.IO.Runtime",
-        "VRMShaders.VRM.IO.Runtime"
+        "VRMShaders.VRM.IO.Runtime",
+        "StbSharp.StbImageSharp",
+        "Mochineko.StbImageSharpForUnity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
