@@ -1,0 +1,23 @@
+{
+    "name": "TarakoKutibiru.RG_ETC1.Samples.VRM",
+    "rootNamespace": "TarakoKutibiru.RG_ETC1.Samples.VRM",
+    "references": [
+        "TarakoKutibiru.RG_ETC1.Runtime",
+        "UniGLTF",
+        "VRM10",
+        "VRMShaders.GLTF.IO.Runtime",
+        "VRMShaders.VRM.IO.Runtime",
+        "StbSharp.StbImageSharp",
+        "Mochineko.StbImageSharpForUnity",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
