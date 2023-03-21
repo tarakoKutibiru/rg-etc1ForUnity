@@ -44,12 +44,7 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             Debug.Log(textureInfo.ImageData.Length);
             Debug.Log(imageResult.Data.Length);
             
-            var colors = new Color32[imageResult.Width*imageResult.Height];
-            for (int i = 0; i < colors.Length; i++)
-            {
-                colors[i] = new Color32(imageResult.Data[i * 4], imageResult.Data[i * 4 + 1], imageResult.Data[i * 4 + 2], imageResult.Data[i * 4 + 3]);
-            }
-            var etc1Data = RgEtc1.EncodeToETC(colors, imageResult.Width, imageResult.Height);
+            var etc1Data = RgEtc1.EncodeToETC(imageResult.Data, imageResult.Width, imageResult.Height);
             Debug.Log($"etc1Data: {etc1Data}");
 
             await UniTask.SwitchToMainThread();

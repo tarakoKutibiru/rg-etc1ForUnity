@@ -30,36 +30,35 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
 
         public static byte[] EncodeToETC(Color32[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
         {
-            int[] pixels = new int[width * height];
             rg_etc1_init();
 
             int i, j;
 
-            using (var stream = new MemoryStream())
-                using (var writer = new BinaryWriter(stream))
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+                
+            for (i = 0; i < height; i += 4)
+            {
+                for (j = 0; j < width; j += 4)
                 {
-                    for (i = 0; i < height; i += 4)
+                    int x, y;
+
+                    Color32[] block = new Color32[16];
+                    int       pi    = 0;
+                    for (x = i; x < i + 4; x++)
                     {
-                        for (j = 0; j < width; j += 4)
+                        for (y = j; y < j + 4; y++)
                         {
-                            int x, y;
-
-                            Color32[] block = new Color32[16];
-                            int       pi    = 0;
-                            for (x = i; x < i + 4; x++)
-                            {
-                                for (y = j; y < j + 4; y++)
-                                {
-                                    block[pi++] = source[y + x * height];
-                                }
-                            }
-
-                            writer.Write(EncodeBlock(block, quality, dithering));
+                            block[pi] = source[y + x * height];
+                            pi++;
                         }
                     }
 
-                    return stream.GetBuffer();
+                    writer.Write(EncodeBlock(block, quality, dithering));
                 }
+            }
+
+            return stream.GetBuffer();
         }
 
         static byte[] EncodeBlock(Color32[] block, Quality quality, bool dithering)
@@ -73,6 +72,57 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
 
             byte[] result = new byte[8];
             rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
+            return result;
+        }
+
+        public static byte[] EncodeToETC(byte[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
+        {
+            rg_etc1_init();
+
+            int i, j;
+
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
+            for (i = 0; i < height; i += 4)
+            {
+                for (j = 0; j < width; j += 4)
+                {
+                    int x, y;
+
+                    var block = new byte[16*4];
+                    int pi = 0;
+                    for (x = i; x < i + 4; x++)
+                    {
+                        for (y = j; y < j + 4; y++)
+                        {
+                            block[pi*4]   = source[(y + x * height)*4];
+                            block[pi*4+1] = source[(y + x * height) * 4+1];
+                            block[pi*4+2] = source[(y + x * height) * 4+2];
+                            block[pi*4+3] = source[(y + x * height) * 4+3];
+
+                            pi++;
+                        }
+                    }
+
+                    writer.Write(EncodeBlock(block, quality, dithering));
+                }
+            }
+
+            return stream.GetBuffer();
+        }
+
+        static byte[] EncodeBlock(byte[] block, Quality quality, bool dithering)
+        {
+            uint[] pixels = new uint[4*4];
+
+                        for (int i = 0; i < pixels.Length; i++)
+                        {
+                            pixels[i] = (uint)((block[i*4+3] << 24) | (block[i * 4 + 2] << 16) | (block[i * 4 + 1] << 8) | block[i * 4]); ;
+                        }
+
+                        byte[] result = new byte[8];
+                        rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
             return result;
         }
     }
