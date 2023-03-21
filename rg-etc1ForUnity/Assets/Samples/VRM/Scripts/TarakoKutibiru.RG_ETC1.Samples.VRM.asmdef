@@ -8,7 +8,8 @@
         "VRMShaders.GLTF.IO.Runtime",
         "VRMShaders.VRM.IO.Runtime",
         "StbSharp.StbImageSharp",
-        "Mochineko.StbImageSharpForUnity"
+        "Mochineko.StbImageSharpForUnity",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

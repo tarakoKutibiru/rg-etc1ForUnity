@@ -7,6 +7,7 @@ using StbImageSharp;
 using Mochineko.StbImageSharpForUnity;
 using TarakoKutibiru.RG_ETC1;
 using TarakoKutibiru.RG_ETC1.Runtime;
+using Cysharp.Threading.Tasks;
 
 namespace TarakoKutibiru.RG_ETC1.Samples.VRM
 {
@@ -36,6 +37,8 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
                     break;
             }
 
+            await UniTask.SwitchToThreadPool();
+
             var imageResult = ImageDecoder.DecodeImage(textureInfo.ImageData);
             Debug.Log(imageResult.Comp.ToUnityTextureFormat());
             Debug.Log(textureInfo.ImageData.Length);
@@ -48,6 +51,8 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             }
             var etc1Data = RgEtc1.EncodeToETC(colors, imageResult.Width, imageResult.Height);
             Debug.Log($"etc1Data: {etc1Data}");
+
+            await UniTask.SwitchToMainThread();
 
             var texture = new Texture2D(imageResult.Width, imageResult.Height, TextureFormat.ETC_RGB4, textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
             texture.LoadRawTextureData(etc1Data);

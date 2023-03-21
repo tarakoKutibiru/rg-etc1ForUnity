@@ -8,6 +8,10 @@ using TarakoKutibiru.RG_ETC1.Runtime;
 using UnityEngine.Networking.Types;
 using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using System;
+using VRMShaders;
 
 namespace TarakoKutibiru.RG_ETC1.Samples.VRM
 {
@@ -17,22 +21,21 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
         [SerializeField] bool etc;
 
         // Start is called before the first frame update
-        void Start()
+        async UniTask Start()
         {
             var path = "file://" + Path.Combine(Application.streamingAssetsPath, filePath);
 #if UNITY_ANDROID && !UNITY_EDITOR
             path = Path.Combine(Application.streamingAssetsPath, fileName);
 #endif
-            StartCoroutine(this.LoadVRM(path));
+            await this.LoadVRM(path);
         }
 
-        IEnumerator LoadVRM(string path)
+        async UniTask LoadVRM(string path)
         {
-
             Debug.Log(path);
 
             using var request = UnityWebRequest.Get(path);
-            yield return request.SendWebRequest();
+            await request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.ConnectionError)
             {
@@ -40,15 +43,14 @@ namespace TarakoKutibiru.RG_ETC1.Samples.VRM
             }
             else
             {
+                var awaitCaller = new ImmediateCaller();
                 var data = new UniGLTF.GlbBinaryParser(request.downloadHandler.data,this.gameObject.name).Parse();
                 using var context = new UniGLTF.ImporterContext(data, textureDeserializer: etc ? new TextureDeserializer():null);
-                var instance = context.Load();
+                var instance = await context.LoadAsync(awaitCaller);
                 instance.ShowMeshes();
                 instance.transform.parent = this.transform;
                 instance.transform.localPosition = Vector3.zero;
             }
-
-            yield return null;
         }
     }
 }
