@@ -69,51 +69,41 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
         public static byte[] EncodeToETC(byte[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
         {
             rg_etc1_init();
-
-            int i, j;
-
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
-
-            for (i = 0; i < height; i += 4)
+            for (int i = 0; i < height; i += 4)
             {
-                for (j = 0; j < width; j += 4)
+                for (int j = 0; j < width; j += 4)
                 {
-                    int x, y;
-
-                    var block = new byte[16*4];
+                    var block = new byte[16 * 4];
                     int pi = 0;
-                    for (x = i; x < i + 4; x++)
+                    for (int x = i; x < i + 4; x++)
                     {
-                        for (y = j; y < j + 4; y++)
+                        for (int y = j; y < j + 4; y++)
                         {
-                            block[pi*4]   = source[(y + x * height)*4];
-                            block[pi*4+1] = source[(y + x * height) * 4+1];
-                            block[pi*4+2] = source[(y + x * height) * 4+2];
-                            block[pi*4+3] = source[(y + x * height) * 4+3];
-
+                            var index = (y + x * height) * 4;
+                            block[pi * 4] = source[index];
+                            block[pi * 4 + 1] = source[index + 1];
+                            block[pi * 4 + 2] = source[index + 2];
+                            block[pi * 4 + 3] = source[index + 3];
                             pi++;
                         }
                     }
-
                     writer.Write(EncodeBlock(block, quality, dithering));
                 }
             }
-
-            return stream.GetBuffer();
+            return stream.ToArray();
         }
-
         static byte[] EncodeBlock(byte[] block, Quality quality, bool dithering)
         {
-            uint[] pixels = new uint[4*4];
-
-                        for (int i = 0; i < pixels.Length; i++)
-                        {
-                            pixels[i] = (uint)((block[i*4+3] << 24) | (block[i * 4 + 2] << 16) | (block[i * 4 + 1] << 8) | block[i * 4]); ;
-                        }
-
-                        byte[] result = new byte[8];
-                        rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
+            var pixels = new uint[4 * 4];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                var index = i * 4;
+                pixels[i] = (uint)((block[index + 3] << 24) | (block[index + 2] << 16) | (block[index + 1] << 8) | block[index]); ;
+            }
+            var result = new byte[8];
+            rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
             return result;
         }
     }
