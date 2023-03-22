@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -31,45 +32,30 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
         public static byte[] EncodeToETC(Color32[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
         {
             rg_etc1_init();
-
-            int i, j;
-
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
-                
-            for (i = 0; i < height; i += 4)
+            for (int i = 0; i < height; i += 4)
             {
-                for (j = 0; j < width; j += 4)
+                for (int j = 0; j < width; j += 4)
                 {
-                    int x, y;
-
                     Color32[] block = new Color32[16];
-                    int       pi    = 0;
-                    for (x = i; x < i + 4; x++)
+                    int pi = 0;
+                    for (int x = i; x < i + 4; x++)
                     {
-                        for (y = j; y < j + 4; y++)
+                        for (int y = j; y < j + 4; y++)
                         {
-                            block[pi] = source[y + x * height];
-                            pi++;
+                            block[pi++] = source[y + x * height];
                         }
                     }
-
                     writer.Write(EncodeBlock(block, quality, dithering));
                 }
             }
-
-            return stream.GetBuffer();
+            return stream.ToArray();
         }
 
         static byte[] EncodeBlock(Color32[] block, Quality quality, bool dithering)
         {
-            uint[] pixels = new uint[block.Length];
-
-            for (int i = 0; i < block.Length; i++)
-            {
-                pixels[i] = (uint)((block[i].a << 24) | (block[i].b << 16) | (block[i].g << 8) | block[i].r);
-            }
-
+            uint[] pixels = block.Select(color => (uint)((color.a << 24) | (color.b << 16) | (color.g << 8) | color.r)).ToArray();
             byte[] result = new byte[8];
             rg_etc1_pack_etc1_block(ref result[0], ref pixels[0], (int)quality, dithering);
             return result;
