@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace TarakoKutibiru.RG_ETC1.Runtime
@@ -34,22 +35,26 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
             rg_etc1_init();
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
-            for (int i = 0; i < height; i += 4)
+            Parallel.For(0, height / 4, i =>
             {
                 for (int j = 0; j < width; j += 4)
                 {
                     Color32[] block = new Color32[16];
                     int pi = 0;
-                    for (int x = i; x < i + 4; x++)
+                    for (int x = i * 4; x < i * 4 + 4; x++)
                     {
                         for (int y = j; y < j + 4; y++)
                         {
                             block[pi++] = source[y + x * height];
                         }
                     }
-                    writer.Write(EncodeBlock(block, quality, dithering));
+                    byte[] encodedBlock = EncodeBlock(block, quality, dithering);
+                    lock (writer)
+                    {
+                        writer.Write(encodedBlock);
+                    }
                 }
-            }
+            });
             return stream.ToArray();
         }
 
