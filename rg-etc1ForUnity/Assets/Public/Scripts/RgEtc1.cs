@@ -33,14 +33,16 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
         public static byte[] EncodeToETC(Color32[] source, int width, int height, Quality quality = Quality.Med, bool dithering = false)
         {
             rg_etc1_init();
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-            Parallel.For(0, height / 4, i =>
+
+            byte[] result = new byte[width * height / 2];
+
+            Parallel.For(0, height / 4, (i) =>
             {
                 for (int j = 0; j < width; j += 4)
                 {
                     Color32[] block = new Color32[16];
                     int pi = 0;
+
                     for (int x = i * 4; x < i * 4 + 4; x++)
                     {
                         for (int y = j; y < j + 4; y++)
@@ -48,14 +50,18 @@ namespace TarakoKutibiru.RG_ETC1.Runtime
                             block[pi++] = source[y + x * height];
                         }
                     }
+
                     byte[] encodedBlock = EncodeBlock(block, quality, dithering);
-                    lock (writer)
+
+                    int index = (i * width / 4 + j / 4) * 8;
+                    lock (result)
                     {
-                        writer.Write(encodedBlock);
+                        Array.Copy(encodedBlock, 0, result, index, 8);
                     }
                 }
             });
-            return stream.ToArray();
+
+            return result;
         }
 
         static byte[] EncodeBlock(Color32[] block, Quality quality, bool dithering)
